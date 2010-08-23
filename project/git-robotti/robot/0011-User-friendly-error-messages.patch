@@ -1,0 +1,32 @@
+From f6cdab3f39a621912aa1bb36e12648641f172d13 Mon Sep 17 00:00:00 2001
+From: Robotti Ruttunen <robotti@versionhallinta-kurssi>
+Date: Fri, 5 Jun 2009 20:34:05 +0300
+Subject: User friendly error messages
+
+---
+ src/main/java/longcat/Cli.java |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
+
+diff --git a/src/main/java/longcat/Cli.java b/src/main/java/longcat/Cli.java
+index 5e4854a..e081119 100644
+--- a/src/main/java/longcat/Cli.java
++++ b/src/main/java/longcat/Cli.java
+@@ -1,8 +1,14 @@
+ package longcat;
+ 
+ public class Cli {
++
+     public static void main(String[] args) {
+-        System.out.print(build().parseArguments(args));
++        try {
++            System.out.print(build().parseArguments(args));
++        } catch (RuntimeException e) {
++            System.err.println(e.getMessage());
++            System.exit(1);
++        }
+     }
+ 
+     private static CliArgumentParser build() {
+-- 
+1.6.0.6
+

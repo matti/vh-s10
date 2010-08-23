@@ -1,0 +1,25 @@
+From 42e069efd422e0c33f55ae5533b2a7da3a1ec507 Mon Sep 17 00:00:00 2001
+From: Robotti Ruttunen <robotti@versionhallinta-kurssi>
+Date: Wed, 23 Sep 2009 20:20:58 +0300
+Subject: Added length unit: Eiffel Tower
+
+---
+ src/main/java/longcat/LengthUnit.java |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/main/java/longcat/LengthUnit.java b/src/main/java/longcat/LengthUnit.java
+index 40dbe8e..b8c22d9 100644
+--- a/src/main/java/longcat/LengthUnit.java
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -2,7 +2,7 @@ package longcat;
+ 
+ public enum LengthUnit {
+ 
+-    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9);
++    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9), EIFFEL("eiffels", 300.65);
+ 
+     private final String name;
+     private final double lengthInMeters;
+-- 
+1.6.0.6
+

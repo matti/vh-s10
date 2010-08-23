@@ -1,0 +1,198 @@
+From 7f7cff0bbca7883cdfe4e825074f6d322892640c Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Fri, 5 Jun 2009 15:26:01 +0300
+Subject: Initial project structure
+
+---
+ .gitignore                |    5 ++
+ LICENSE.txt               |   19 +++++++
+ pom.xml                   |  121 +++++++++++++++++++++++++++++++++++++++++++++
+ src/main/assembly/src.xml |   21 ++++++++
+ 4 files changed, 166 insertions(+), 0 deletions(-)
+ create mode 100644 .gitignore
+ create mode 100644 LICENSE.txt
+ create mode 100644 pom.xml
+ create mode 100644 src/main/assembly/src.xml
+
+diff --git a/LICENSE.txt b/LICENSE.txt
+new file mode 100644
+index 0000000..6080fed
+--- /dev/null
++++ b/trunk/LICENSE.txt
+@@ -0,0 +1,19 @@
++Copyright (c) 2009 Esko Luontola <www.orfjackal.net>
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++THE SOFTWARE.
+diff --git a/pom.xml b/pom.xml
+new file mode 100644
+index 0000000..bbec6cf
+--- /dev/null
++++ b/trunk/pom.xml
+@@ -0,0 +1,121 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <groupId>net.orfjackal.longcat</groupId>
++    <artifactId>longcat</artifactId>
++    <version>0.1.0-SNAPSHOT</version>
++    <packaging>jar</packaging>
++
++    <name>Longcat</name>
++    <description>Longcat is looooooooooong</description>
++    <url>http://github.com/orfjackal/longcat/</url>
++    <inceptionYear>2009</inceptionYear>
++
++    <licenses>
++        <license>
++            <name>MIT License</name>
++            <url>http://github.com/orfjackal/longcat/raw/master/LICENSE.txt</url>
++        </license>
++    </licenses>
++
++    <developers>
++        <developer>
++            <id>orfjackal</id>
++            <name>Esko Luontola</name>
++            <url>http://www.orfjackal.net/</url>
++        </developer>
++    </developers>
++
++    <scm>
++        <connection>scm:git:git://github.com/orfjackal/longcat.git</connection>
++        <url>http://github.com/orfjackal/longcat/tree</url>
++    </scm>
++
++
++    <dependencies>
++
++        <!-- Testing -->
++
++        <dependency>
++            <groupId>junit</groupId>
++            <artifactId>junit</artifactId>
++            <version>4.5</version>
++            <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.mockito</groupId>
++            <artifactId>mockito-all</artifactId>
++            <version>1.7</version>
++            <scope>test</scope>
++        </dependency>
++
++    </dependencies>
++
++    <build>
++        <plugins>
++
++            <plugin>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <configuration>
++                    <source>1.5</source>
++                    <target>1.5</target>
++                    <encoding>UTF-8</encoding>
++                </configuration>
++            </plugin>
++
++            <plugin>
++                <artifactId>maven-resources-plugin</artifactId>
++                <configuration>
++                    <encoding>UTF-8</encoding>
++                </configuration>
++            </plugin>
++
++            <plugin>
++                <artifactId>maven-surefire-plugin</artifactId>
++                <configuration>
++                    <includes>
++                        <include>**/*Test.java</include>
++                    </includes>
++                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
++                </configuration>
++            </plugin>
++
++            <plugin>
++                <artifactId>maven-assembly-plugin</artifactId>
++                <inherited>false</inherited>
++                <configuration>
++                    <attach>false</attach>
++                    <descriptors>
++                        <descriptor>src/main/assembly/src.xml</descriptor>
++                    </descriptors>
++                </configuration>
++                <executions>
++                    <execution>
++                        <id>make-assembly</id>
++                        <phase>package</phase>
++                        <goals>
++                            <goal>attached</goal>
++                        </goals>
++                    </execution>
++                </executions>
++            </plugin>
++
++            <plugin>
++                <artifactId>maven-source-plugin</artifactId>
++                <executions>
++                    <execution>
++                        <id>attach-sources</id>
++                        <phase>verify</phase>
++                        <goals>
++                            <goal>jar</goal>
++                        </goals>
++                    </execution>
++                </executions>
++            </plugin>
++
++        </plugins>
++    </build>
++
++</project>
+diff --git a/src/main/assembly/src.xml b/src/main/assembly/src.xml
+new file mode 100644
+index 0000000..c96d942
+--- /dev/null
++++ b/trunk/src/main/assembly/src.xml
+@@ -0,0 +1,21 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<assembly xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.1.0-SNAPSHOT.xsd">
++
++    <id>src</id>
++    <formats>
++        <format>zip</format>
++    </formats>
++    <includeBaseDirectory>true</includeBaseDirectory>
++
++    <fileSets>
++        <fileSet>
++            <excludes>
++                <exclude>target/**</exclude>
++                <exclude>*/target/**</exclude>
++                <exclude>.git/**</exclude>
++            </excludes>
++        </fileSet>
++    </fileSets>
++
++</assembly>
+-- 
+1.6.3.2
+

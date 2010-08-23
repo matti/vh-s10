@@ -1,0 +1,75 @@
+From 844c495c85914ee9f44a81eea114dbafbbd74d73 Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Fri, 5 Jun 2009 19:50:54 +0300
+Subject: Length unit conversions
+
+---
+ src/main/java/longcat/LengthUnit.java     |   10 ++++++++--
+ src/test/java/longcat/LengthUnitTest.java |   25 +++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100755 src/test/java/longcat/LengthUnitTest.java
+
+diff --git a/src/main/java/longcat/LengthUnit.java b/src/main/java/longcat/LengthUnit.java
+index 86f3198..40dbe8e 100644
+--- a/src/main/java/longcat/LengthUnit.java
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -2,12 +2,14 @@ package longcat;
+ 
+ public enum LengthUnit {
+ 
+-    METERS("m"), FEET("ft"), PETRONAS("petronas");
++    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9);
+ 
+     private final String name;
++    private final double lengthInMeters;
+ 
+-    private LengthUnit(String name) {
++    private LengthUnit(String name, double lengthInMeters) {
+         this.name = name;
++        this.lengthInMeters = lengthInMeters;
+     }
+ 
+     public static LengthUnit parse(String name) {
+@@ -18,4 +20,8 @@ public enum LengthUnit {
+         }
+         throw new IllegalArgumentException("No such unit of length: " + name);
+     }
++
++    public int from(int length, LengthUnit unit) {
++        return (int) (length * unit.lengthInMeters / this.lengthInMeters);
++    }
+ }
+diff --git a/src/test/java/longcat/LengthUnitTest.java b/src/test/java/longcat/LengthUnitTest.java
+new file mode 100755
+index 0000000..d459785
+--- /dev/null
++++ b/src/test/java/longcat/LengthUnitTest.java
+@@ -0,0 +1,25 @@
++package longcat;
++
++import junit.framework.TestCase;
++import static longcat.LengthUnit.*;
++
++public class LengthUnitTest extends TestCase {
++
++    public void test__Identity_conversion() {
++        int feet1 = 10000;
++        int feet2 = FEET.from(feet1, FEET);
++        assertEquals(feet1, feet2);
++    }
++
++    public void test__Convert_feet_to_meters() {
++        int feet = 10000;
++        int meters = METERS.from(feet, FEET);
++        assertEquals(3048, meters);
++    }
++
++    public void test__Convert_meters_to_feet() {
++        int meters = 3048;
++        int feet = FEET.from(meters, METERS);
++        assertEquals(10000, feet);
++    }
++}
+-- 
+1.6.0.6
+

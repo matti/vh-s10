@@ -1,0 +1,143 @@
+From 76c64059769fb57c545e2c050fcc7bb806cbc347 Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Tue, 28 Jul 2009 15:28:24 +0300
+Subject: Assembling a longcat
+
+---
+ src/main/java/longcat/Longcat.java            |   44 +++++++++++++++++++++++++
+ src/main/java/longcat/LongcatFactory.java     |    8 ++++
+ src/test/java/longcat/LongcatFactoryTest.java |   28 ++++++++++++++++
+ src/test/resources/longcat.txt                |   20 +++++++++++
+ 4 files changed, 100 insertions(+), 0 deletions(-)
+ create mode 100644 src/main/java/longcat/Longcat.java
+ create mode 100644 src/main/java/longcat/LongcatFactory.java
+ create mode 100644 src/test/java/longcat/LongcatFactoryTest.java
+ create mode 100644 src/test/resources/longcat.txt
+
+diff --git a/src/main/java/longcat/Longcat.java b/src/main/java/longcat/Longcat.java
+new file mode 100644
+index 0000000..fa06ca5
+--- /dev/null
++++ b/src/main/java/longcat/Longcat.java
+@@ -0,0 +1,44 @@
++package longcat;
++
++public class Longcat {
++
++    // Source: http://encyclopediadramatica.com/Longcat
++
++    public static final String HEAD_ROW = "" +
++            "    /\\___/\\         \n" +
++            "   /       \\         \n" +
++            "  |  #    # |         \n" +
++            "  \\     @   |        \n" +
++            "   \\   _|_ /         \n" +
++            "   /       \\______   \n" +
++            "  / _______ ___   \\  \n" +
++            "  |_____   \\   \\__/ \n" +
++            "   |    \\__/         \n";
++    public static final String BODY_ROW = "" +
++            "   |       |          \n";
++    public static final String FEET_ROW = "" +
++            "   /        \\        \n" +
++            "  /   ____   \\       \n" +
++            "  |  /    \\  |       \n" +
++            "  | |      | |        \n" +
++            " /  |      |  \\      \n" +
++            " \\__/      \\__/     \n";
++
++    private final int bodySize;
++
++    public Longcat(int bodySize) {
++        this.bodySize = bodySize;
++    }
++
++    public String getBody() {
++        String body = "";
++        for (int i = 0; i < bodySize; i++) {
++            body += BODY_ROW;
++        }
++        return body;
++    }
++
++    public String toString() {
++        return HEAD_ROW + getBody() + FEET_ROW;
++    }
++}
+diff --git a/src/main/java/longcat/LongcatFactory.java b/src/main/java/longcat/LongcatFactory.java
+new file mode 100644
+index 0000000..36fa6a2
+--- /dev/null
++++ b/src/main/java/longcat/LongcatFactory.java
+@@ -0,0 +1,8 @@
++package longcat;
++
++public class LongcatFactory {
++
++    public Longcat createLongcat(int bodySize) {
++        return new Longcat(bodySize);
++    }
++}
+diff --git a/src/test/java/longcat/LongcatFactoryTest.java b/src/test/java/longcat/LongcatFactoryTest.java
+new file mode 100644
+index 0000000..9f74ff3
+--- /dev/null
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -0,0 +1,28 @@
++package longcat;
++
++import junit.framework.TestCase;
++
++public class LongcatFactoryTest extends TestCase {
++
++    private LongcatFactory factory = new LongcatFactory();
++
++    public void test__Longcat_with_body_size_0() {
++        Longcat longcat = factory.createLongcat(0);
++        assertEquals("", longcat.getBody());
++    }
++
++    public void test__Longcat_with_body_size_1() {
++        Longcat longcat = factory.createLongcat(1);
++        assertEquals(Longcat.BODY_ROW, longcat.getBody());
++    }
++
++    public void test__Longcat_with_body_size_2() {
++        Longcat longcat = factory.createLongcat(2);
++        assertEquals(Longcat.BODY_ROW + Longcat.BODY_ROW, longcat.getBody());
++    }
++
++    public void test__Fully_assembled_longcat() {
++        Longcat longcat = factory.createLongcat(2);
++        assertEquals(Longcat.HEAD_ROW + longcat.getBody() + Longcat.FEET_ROW, longcat.toString());
++    }
++}
+diff --git a/src/test/resources/longcat.txt b/src/test/resources/longcat.txt
+new file mode 100644
+index 0000000..89c27bb
+--- /dev/null
++++ b/src/test/resources/longcat.txt
+@@ -0,0 +1,20 @@
++    /\___/\
++   /       \
++  |  #    # |
++  \     @   |
++   \   _|_ /
++   /       \______
++  / _______ ___   \
++  |_____   \   \__/
++   |    \__/
++   |       |
++   |       |
++   |       |
++   |       |
++   |       |
++   /        \
++  /   ____   \
++  |  /    \  |
++  | |      | |
++ /  |      |  \
++ \__/      \__/
+-- 
+1.6.0.6
+

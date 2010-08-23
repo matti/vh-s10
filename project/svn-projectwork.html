@@ -1,0 +1,285 @@
+<html>
+<head>
+<title>Version Control - Project Work</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+ol.steps li {
+	border-top: 1px solid #CCCCCC;
+	padding-top: 1em;
+	padding-bottom: 2em;
+}
+span.instr {
+	color: #0000FF;
+}
+pre {
+	color: #996633;
+}
+a {
+	color: #FF0000;
+}
+a:visited {
+	color: #AA0000;
+}
+</style>
+</head>
+<body>
+
+<h1>Version Control - Subversion Project Work</h1>
+
+<ul>
+	<li>If you get stuck, it's best just to create a new repository and start from the beginning.</li>
+	<li>Commit messages are magical, they need to be written exactly as given.</li>
+	<li>If you need to retry something, just commit again with the same commit message.</li>
+	<li>Don't skip any steps, they need to be done in order.</li>
+	<li>Read the instructions carefully!</li>
+</ul>
+
+
+<h2>Passing</h2>
+
+<p>Submit SVN-project work by 15.12.2010 23:59.</p>
+
+<h2>Help! I'm stuck!</h2>
+
+<h3>SVN</h3>
+
+<p>Read the instructions carefully, try creating a new repository and starting again.</p>
+
+
+<hr/>
+<h2>Steps</h2>
+
+<ol class="steps">
+<li><span class="instr">Create a repository with <a href="http://db.cs.helsinki.fi/~tkt_verh/repo/user.html">Create-A-Repo</a>. Checkout your working copy.  If you want to start again, you can just create a new repository.</span>
+
+
+
+</li>
+
+<!-- ################### -->
+
+<li><span class="instr">Add these new files to the trunk/ directory in your working copy:</span>
+<br><a href="p1/src/main/java/longcat/CliArgumentParser.java">src/main/java/longcat/CliArgumentParser.java</a>
+<br><a href="p1/src/main/java/longcat/LengthUnit.java">src/main/java/longcat/LengthUnit.java</a>
+<br><a href="p1/src/main/java/longcat/LongcatFactoryImpl.java">src/main/java/longcat/LongcatFactoryImpl.java</a>
+<br><a href="p1/src/test/java/longcat/CliArgumentParserTest.java">src/test/java/longcat/CliArgumentParserTest.java</a>
+
+<p><span class="instr">Make following changes in the following (already existing) files:</span>
+<br><a href="p1/src/main/java/longcat/LongcatFactory.java">src/main/java/longcat/LongcatFactory.java</a>
+<pre>
+--- a/src/main/java/longcat/LongcatFactory.java
++++ b/src/main/java/longcat/LongcatFactory.java
+@@ -1,8 +1,8 @@
+ package longcat;
+ 
+-public class LongcatFactory {
++public interface LongcatFactory {
+ 
+-    public Longcat createLongcat(int bodySize) {
+-        return new Longcat(bodySize);
+-    }
++    Longcat createLongcat(int bodySize);
++
++    Longcat createLongcat(int length, LengthUnit unit);
+ }
+</pre>
+<br><a href="p1/src/test/java/longcat/LongcatFactoryTest.java">src/test/java/longcat/LongcatFactoryTest.java</a>
+<pre>
+--- a/src/test/java/longcat/LongcatFactoryTest.java
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -4,7 +4,7 @@ import junit.framework.TestCase;
+ 
+ public class LongcatFactoryTest extends TestCase {
+ 
+-    private LongcatFactory factory = new LongcatFactory();
++    private LongcatFactory factory = new LongcatFactoryImpl();
+ 
+     public void test__Longcat_with_body_size_0() {
+         Longcat longcat = factory.createLongcat(0);
+</pre>
+
+<p><span class="instr">Commit the added and modified files with the following comment: "Command line argument parsing"</span>
+</li>
+
+<!-- ################### -->
+
+<p>If everything was correct, the Robot will make a commit after yours with the message: "Command line interface".</p>
+	
+<p><span class="instr">Update your working copy to be up-to-date with the Robot.</span>
+</li>
+
+<!-- ################### -->
+
+<li><span class="instr">Add this file to your working copy:</span>
+<br><a href="p2/src/test/java/longcat/LengthUnitTest.java">src/test/java/longcat/LengthUnitTest.java</a>
+
+<p><span class="instr">Make these changes:</span>
+<br><a href="p2/src/main/java/longcat/LengthUnit.java">src/main/java/longcat/LengthUnit.java</a>
+<pre>
+--- a/src/main/java/longcat/LengthUnit.java
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -2,12 +2,14 @@ package longcat;
+ 
+ public enum LengthUnit {
+ 
+-    METERS("m"), FEET("ft"), PETRONAS("petronas");
++    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9);
+ 
+     private final String name;
++    private final double lengthInMeters;
+ 
+-    private LengthUnit(String name) {
++    private LengthUnit(String name, double lengthInMeters) {
+         this.name = name;
++        this.lengthInMeters = lengthInMeters;
+     }
+ 
+     public static LengthUnit parse(String name) {
+@@ -18,4 +20,8 @@ public enum LengthUnit {
+         }
+         throw new IllegalArgumentException("No such unit of length: " + name);
+     }
++
++    public int from(int length, LengthUnit unit) {
++        return (int) (length * unit.lengthInMeters / this.lengthInMeters);
++    }
+ }
+</pre>
+
+</li>
+
+<!-- ################### -->
+
+<li><span class="instr">Commit the changes with the following comment: "Length unit conversions"</span>
+
+<p>Commit will fail because the Robot made two commits <em>just</em> before yours: "Optimized: use StringBuilder to construct the longcat body, as it can be very loooooooooong" and "Refactored: renamed constants".
+	
+<p><span class="instr">Update your working copy to match our new (and improved) StringBuilder implementation.</span>
+
+<p><span class="instr">Commit again with the same commit message: "Length unit conversions"</span>
+
+<p>Everything should be okay now.</p>
+
+</li>
+
+<!-- ################### -->
+
+<li><span class="instr">It should be possible to specify the Longcat length with natural length units, such as <a href="http://en.wikipedia.org/wiki/Petronas_Twin_Towers">Petronas Towers</a>.  Make the following changes to trunk:</span>
+<br><a href="p3/src/main/java/longcat/LengthUnit.java">src/main/java/longcat/LengthUnit.java</a>
+<pre>
+--- a/src/main/java/longcat/LengthUnit.java
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -2,7 +2,7 @@ package longcat;
+ 
+ public enum LengthUnit {
+ 
+-    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9);
++    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9), LINES("lines", 0.009);
+ 
+     private final String name;
+     private final double lengthInMeters;
+</pre>
+<br><a href="p3/src/main/java/longcat/Longcat.java">src/main/java/longcat/Longcat.java</a>
+<pre>
+--- a/src/main/java/longcat/Longcat.java
++++ b/src/main/java/longcat/Longcat.java
+@@ -27,11 +27,14 @@ public class Longcat {
+     private final int bodySize;
+ 
+     public Longcat(int bodySize) {
++        if (bodySize < 0) {
++            throw new IllegalArgumentException("Longcat can not be that short!");
++        }
+         this.bodySize = bodySize;
+     }
+ 
+     public String getBody() {
+-        StringBuilder body = new StringBuilder();
++        StringBuilder body = new StringBuilder(bodySize * BODY_LINE.length());
+         for (int i = 0; i < bodySize; i++) {
+             body.append(BODY_LINE);
+         }
+</pre>
+<br><a href="p3/src/main/java/longcat/LongcatFactoryImpl.java">src/main/java/longcat/LongcatFactoryImpl.java</a>
+<pre>
+--- a/src/main/java/longcat/LongcatFactoryImpl.java
++++ b/src/main/java/longcat/LongcatFactoryImpl.java
+@@ -7,6 +7,19 @@ public class LongcatFactoryImpl implements LongcatFactory {
+     }
+ 
+     public Longcat createLongcat(int length, LengthUnit unit) {
+-        return null;
++        int totalLines = LengthUnit.LINES.from(length, unit);
++        int nonBodyLines = lineCount(Longcat.HEAD_LINES + Longcat.FEET_LINES);
++        return new Longcat(totalLines - nonBodyLines);
++    }
++
++    static int lineCount(String s) {
++        int lines = 0;
++        for (int i = 0; i < s.length(); i++) {
++            char c = s.charAt(i);
++            if (c == '\n') {
++                lines++;
++            }
++        }
++        return lines;
+     }
+ }
+</pre>
+<br><a href="p3/src/test/java/longcat/LongcatFactoryTest.java">src/test/java/longcat/LongcatFactoryTest.java</a>
+<pre>
+--- a/src/test/java/longcat/LongcatFactoryTest.java
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -25,4 +25,19 @@ public class LongcatFactoryTest extends TestCase {
+         Longcat longcat = factory.createLongcat(2);
+         assertEquals(Longcat.HEAD_LINES + longcat.getBody() + Longcat.FEET_LINES, longcat.toString());
+     }
++
++    public void test__Longcat_length_specified_in_meters() {
++        Longcat longcat = factory.createLongcat(1, LengthUnit.METERS);
++        int lines = LongcatFactoryImpl.lineCount(longcat.toString());
++        assertEquals(LengthUnit.LINES.from(1, LengthUnit.METERS), lines);
++    }
++
++    public void test__Too_short_longcat() {
++        try {
++            factory.createLongcat(0, LengthUnit.METERS);
++            fail();
++        } catch (IllegalArgumentException e) {
++            assertEquals("Longcat can not be that short!", e.getMessage());
++        }
++    }
+ }
+</pre>
+
+</li>
+
+<!-- ################### -->
+
+<li><span class="instr">Commit the changes with message: "Specifying Longcat length with natural length units"</span></p>
+
+<p>Sadly, the commit will fail.  The Robot decided to add one more useful length unit <em>just</em> before your commit.  Update your working copy.  You'll see that it gets even worse, because the changes in your working copy conflict with that addition.</p>
+
+<p><span class="instr">Resolve all conflicts and remember to mark everything resolved.</span>
+
+<p><span class="instr">Commit the new merged and conflict free changeset to the repository with the same commit message: "Specifying Longcat length with natural length units"</span>
+
+<p>If everything went right, the Robot will do after you a series of commits, of which the last one is "Release 1.0".  You can verify this by updating your working copy and using the svn log command to see the latest commit:
+
+<pre>
+	------------------------------------------------------------------------
+	r14 | robottiruttunen | 2009-09-29 14:43:55 +0300 (Ti, 29 Syy 2009) | 1 line
+
+	Release 1.0
+</pre>
+
+</p>
+	
+
+
+</li>
+</ol>
+
+</body>
+</body>
+ 

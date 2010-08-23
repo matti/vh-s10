@@ -1,0 +1,18 @@
+#!/bin/sh
+
+REPOS="$1"
+REV="$2"
+
+AUTHOR=`svnlook author $1`
+if [ "$AUTHOR" == "robo" ]; then
+        exit 0
+fi
+
+rm -rf /tmp/koe
+svn co file:///$REPOS /tmp/koe
+
+cd /tmp/koe
+echo "Robot was here" >> koe.txt
+
+svn ci --username robo -m "robot-robot"
+

@@ -1,0 +1,70 @@
+From 69ecdc15228e37b849e2f58abf3cdaad6031d552 Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Fri, 5 Jun 2009 17:23:23 +0300
+Subject: Command line interface
+
+---
+ pom.xml                        |   20 ++++++++++++++++++++
+ src/main/java/longcat/Cli.java |   12 ++++++++++++
+ 2 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 src/main/java/longcat/Cli.java
+
+diff --git a/pom.xml b/pom.xml
+index bbec6cf..e50193b 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -90,6 +90,14 @@
+                     <descriptors>
+                         <descriptor>src/main/assembly/src.xml</descriptor>
+                     </descriptors>
++                    <descriptorRefs>
++                        <descriptorRef>jar-with-dependencies</descriptorRef>
++                    </descriptorRefs>
++                    <archive>
++                        <manifest>
++                            <mainClass>longcat.Cli</mainClass>
++                        </manifest>
++                    </archive>
+                 </configuration>
+                 <executions>
+                     <execution>
+@@ -103,6 +111,18 @@
+             </plugin>
+ 
+             <plugin>
++                <artifactId>maven-jar-plugin</artifactId>
++                <configuration>
++                    <archive>
++                        <manifest>
++                            <addClasspath>true</addClasspath>
++                            <mainClass>longcat.Cli</mainClass>
++                        </manifest>
++                    </archive>
++                </configuration>
++            </plugin>
++
++            <plugin>
+                 <artifactId>maven-source-plugin</artifactId>
+                 <executions>
+                     <execution>
+diff --git a/src/main/java/longcat/Cli.java b/src/main/java/longcat/Cli.java
+new file mode 100644
+index 0000000..5e4854a
+--- /dev/null
++++ b/src/main/java/longcat/Cli.java
+@@ -0,0 +1,12 @@
++package longcat;
++
++public class Cli {
++    public static void main(String[] args) {
++        System.out.print(build().parseArguments(args));
++    }
++
++    private static CliArgumentParser build() {
++        LongcatFactory factory = new LongcatFactoryImpl();
++        return new CliArgumentParser(factory);
++    }
++}
+-- 
+1.6.0.6
+

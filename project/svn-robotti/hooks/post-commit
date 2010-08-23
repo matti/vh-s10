@@ -1,0 +1,10 @@
+#!/usr/bin/ruby
+
+Dir.chdir ARGV[0]
+require 'robot/common'
+
+author = `svnlook author #{ARGV[0]}`
+author.strip!
+exit 0 if author == 'robottiruttunen'
+
+require 'robot/post-commit'

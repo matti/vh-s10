@@ -1,0 +1,46 @@
+
+
+1.	Pohjalla on valmista koodia "76c64 Assembling a longcat" asti (clean_history branch).
+
+2.	Tehtävä:
+	Lisää muutokset "ef407e Command line argument parsing".
+	Systeemi ei tee samanakaisia muutoksia.
+
+3.	Muutokset pushataan.
+	Systeemi tarkistaa tiedostojen sisällön.
+	Systeemi lisää sen jälkeen kommitin "69ecdc1 Command line interface".
+
+4.	Tehtävä:
+	Lisää muutokset "6998251d Length unit conversions".
+	Systeemi tekee samanaikaisia muutoksia, mutta ei konflikteja.
+	
+5.	Muutokset pushataan.
+	Systeemi tarkistaa kommitista pelkät tiedostonimet (1 lisäys ja 1 muutos).
+	Systeemi lisää ennen sitä kommitin "e0a0a4 Optimized: use StringBuilder to construct the longcat body, as it can be very loooooooooong", mikä estää pushauksen.
+
+6.	Tehtävä:
+	Käytä rebasea. "Length unit conversions" pitä tulla historiassa viimeiseksi.
+
+7.	Muutokset pushataan.
+	Systeemi tarkistaa tiedostojen sisällön.
+	Lisäksi systeemi tarkistaa, että "Length unit conversions" on historiassa "e0a0a4 Optimized":n jälkeen, mutta että sen author-aikaleima on ennen "e0a0a4 Optimized":n kommitointi-aikaleimaa (mahdollinen ongelma: käyttäjän kello ei ole tarkasti ajassa - jätetään ajan tarkistus pois, jos ei onnistu luotettavasti). Jos näin ei ole, niin näytetään virheilmoitus, että pitää käyttää rebasea.
+
+8.	Tehtävä:
+	Lisää muutokset "df17e2c8 Specifying Longcat length with natural length units".
+	Systeemi tekee samanaikaisia, konfliktoivia muutoksia.
+
+9.	Muutokset pushataan.
+	Systeemi tarkistaa kommitista pelkät tiedostonimet (4 muutosta).
+	Systeemi tekee ennen sitä kommitin "9de39fb Refactored: renamed constants", mikä estää pushauksen ja aiheuttaa konfliktin.
+
+10.	Tehtävä:
+	Mergeä konfliktoivat muutokset käsipelillä.
+
+11.	Muutokset pushataan.
+	Systeemi tarkistaa tiedostojen sisällön.
+	Systeemi tekee niiden jälkeen kaikki loput kommitit:
+		"18e0a1 Longcat is looooooooooooooooong"
+		"a65c06 User friendly error messages"
+		"51550a Distribution archive and startup files"
+	Systeemi tarkistaa tiedostojen sisällön ja ilmoittaa, että tehtävä on mennyt läpi.
+	Lisäksi systeemi lähettää sähköpostin kurssin vetäjälle.

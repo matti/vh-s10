@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Versionhallinta - Harjoitukset 1/2 - SVN</title>
+  
+	<link type="text/css" media="screen,print" rel="stylesheet" href="harjoitukset.css" />
+  
+  </head>
+  <body>
+    <h1>Versionhallinta - Harjoitukset 1/2 - SVN</h1>
+
+	<p>Nämä harjoitukset jakautuvat kahteen osaan: etukäteen ja paikalla tehtäviin.  Pahoittelemme edelleen "branchi repositoryn trunkista" -kieltä.</p>
+	
+	<h2>Etukäteen</h2>
+	
+	<h3 class="tehtävä">Työkalut tutuiksi</h3>
+	
+	<p>Tee etukäteen nämä Linux-näppäilyharjoitukset ja yksinkertainen SVN:n kokeilu, niin harjoituksissa pääset suoraan oikeisiin tehtäviin.</o>
+	<ol>
+		<li>Varmista, että pääset kirjautumaan koneelle <code>db.cs.helsinki.fi</code></li>
+		<li>Jos kyllästyttää naputtaa jatkuvasti salasanaa, niin <a href="http://cs.helsinki.fi/group/kuje/compfac/ssh_avain.html">tee itsellesi SSH-avain</a></li>
+		<li>Luo repository käyttäen <code>svnadmin</code> -työkalua.
+			<ul>
+				<li>Voit tehdä repositoryn mille koneelle tahansa</li>
+			</ul>
+		</li>
+		<li>Ota siitä itsellesi työkopio samalle koneelle, käyttäen <code>file://</code> -URLia.
+			<ul>
+				<li>vinkki: komennolla <code>pwd</code> saa nykyisen hakemiston, joten: <code>file:///`pwd`/repo</code> on sama kuin <code>file:///home/käyttäjätunnus/repo</code></li>
+			</ul>
+		</li>
+		
+		<li>Aseta ympäristömuuttuja $EDITOR haluamaksesi editoriksi.
+			<ul>
+				<li>Editoi tiedostoa <code>.bashrc</code></li>
+				<li>Lisää sinne rivi <code>export EDITOR=nano</code> (tai haluamasi editori)</li>
+				<li>Ota muutokset käyttöön ilman uudelleenkirjautumista <code>source .bashrc</code>
+			</ul>
+		</li>
+		
+		<li>Luo työkopioon SVN:n "standardihakemistot":  <code>trunk</code>, <code>branches</code> ja <code>tags</code></li>
+		<li>Kommitoi ensimmäinen versio.</li>
+		<li>Ota repositorystä työkopio jollekkin toiselle koneelle, kuten <code>melkki.cs.helsinki.fi</code> tai <code>melkinpaasi.cs.helsinki.fi</code> käyttäen <code>svn+ssh://käyttäjätunnus@kohdekone/koko/polku/repository</code> -URLia
+			<ul>
+				<li>db:n ulkopuolisilla koneilla polku on <code>/fs/home/käyttäjätunnus</code>, db:llä <code>/home/käyttäjätunnus</code></li>
+			</ul>
+		</li>
+		<li>Jatka kokeilua, kunnes tunnet olosi kotoisaksi</li>
+	</ol>
+	
+	<h3 class="tehtävä">Tutustu tehtäviin</h3>
+	
+	<p>Katsasta tehtävät etukäteen ja kokeile onnistuuko diffin, mergen, copy ym. tarvittavien komentojen käyttö jo ennen harjoituksia.</p>
+	
+	
+	<h2>Paikanpäällä</h2>
+		
+	<p>Muodostellaan 3 hengen pienryhmiä ja tehdään tehtävät.</p>
+
+
+	<h3 class="tehtävä">Luo repository ja hae muiden ryhmäläisten luomista repositoryistä oma työkopio</h3>
+
+	<p>Harjoitellaan vielä, että repositoryjen luonti ja tiedosto-oikeudet menevät varmasti oikein.</p>
+	
+	<ol>
+		<li>Luo SVN-repository kotihakemistoosi ja anna siihen luku-, kirjoitus- ja suoritusoikeudet ryhmälle rekursiivisesti.  (<code>chmod -R g+rwx</code>)
+			<ul>
+				<li>Oikeassa käytössä oikeudet tulisi antaa vain sille ryhmälle, joka käyttää repositoryä. Nyt kuitenkin annetaan oikeudet <code>tkol</code>-ryhmälle, johon kuuluvat kaikki.</li>
+			</ul>
+		</li>
+	
+		<li>Hae muiden ryhmäläisten repositoryistä itsellesi omalle koneellesi työkopio SSH:n yli.
+			<ul>
+				<li>Hae työkopio esim. melkkiin: <code>svn+ssh://USER@db/home/tunnus/repository</code></li>
+			</ul>
+		</li>
+		
+		<li>Lisätkää repositoryyn yksi tiedosto ja kokeilkaa, että saatte sen myös commitoitua.</li>
+		<li>Valmis!</li>
+	</ol>
+
+
+
+
+
+	<h3 class="tehtävä">Commit-conflict: Kissan venytys</h3>
+	
+	
+	<p>On annettu "shortcat"</p>
+	
+	
+	<pre>
+	    /\___/\
+	   /       \
+	  |  #    # |
+	  \     @   |
+	   \   _|_ /
+	   /       \______
+	  / _______ ___   \
+	  |_____   \   \__/
+	   |    \__/
+	   |       |
+	   /        \
+	  /   ____   \
+	  |  /    \  |
+	  | |      | |
+	 /  |      |  \
+	 \__/      \__/
+	
+		Shortcat.
+	</pre>
+	
+	<ol>
+		<li>Luokaa ryhmälle yhteinen repository kurssin <a href="http://db.cs.helsinki.fi/~tkt_verh/repo/group.html">repositoryn luontikoneella</a>
+		<li>Hakekaa repositorystä työkopio</li>
+		<li>Yksi ryhmän jäsen laittaa Shortcatin repositoryyn tiedostoon <code>trunk/shortcat.txt</code></li>
+		<li>Jokainen ryhmän jäsen pidentää oman työkopionsa Shortcattiä keskikohdasta yhdellä <code>|etunimi|</code> -rivillä, pidennyksen jälkeen ryhmän jäsen tekee commitin yhteiseen repositoryyn.  Tehkää tämä samanaikaisesti siten, että committeja tulee jokaiselle viisi kappaletta.  Shortcatin pituudeksi tulee tällöin [ryhmän jäsenien lukumäärä] x 5.  Selvittäkää ristiriidat venytyksen edetessä.</li>
+		<li>Käyttäkää <code>svn blame</code> -komentoa <code>shortcat.txt</code> -tiedostoon ja tallettakaa sen tulostus repositoryyn</li>
+		<li>Uudelleennimetkää tiedosto longcat.txt:ksi, sillä shortcat on nyt looooooooooooong.  Muistakaa kuitenkin säilyttää versiohistoria!</li>
+	</ol>
+
+	<h3 class="tehtävä">Branching, merge, tag, revert</h3>
+
+	<ol>
+		<li>Jokainen ryhmän jäsen tekee oman branchin <code>trunk</code> -hakemistosta hakemistoon <code>branches/[etunimi]</code></li>
+		<li>Muokatkaa oman branchinne Longcatin päätä ja jalkoja.  Commit kun on valmista.</li>
+		<li>Mergetkää oma valmis branchinne <code>trunk</code> -hakemistoon.</li>
+		<li>Tehkää <code>trunk</code> -hakemistosta tag <code>valmis-[etunimi]</code></li>
+		<li>Katsokaa <code>svn diff</code> -komennolla <code>trunkin</code> ensimmäisen version ja HEAD:n ero.  Palauttakaa <code>svn merge</code> -komennolla alkuperäinen versio.</li>
+	</ol>
+	
+	
+	<h3 class="tehtävä">Ignore</h3>
+	
+	<ol>
+		<li>Kääntäkää <code>trunk</code> -hakemistossa oleva <code>Longcat.java</code></li>
+		<li>Lisätkää hakemistoon property <code>svn:ignore</code>, jotta <code>*.class</code> -tiedostot pysyvät poissa versionhallinnasta.</li>
+	</ol>
+	
+	
+	<h3 class="tehtävä">Graafiset työkalut</h3>
+	
+	<p>Näitä tehdään jos ehditään ja/tai tuntuu, että osaa aikaisemamt jo riittävän hyvin. Näitä ei tarvitse osata harjoitustyössä.</p>	
+	
+	<ol>
+		<li>Asentakaa esim. Eclipsen Subclipse-plugin</li>
+		<li>Tehkää aikaisempia conflict -kokeita sen avulla.</li>
+	</ol>
+	
+	<h3 class="tehtävä">Hooks</h3>
+
+	<p>Vähän edistyneemmille..</p>
+	<ol>
+		<li>Laittakaa omaan repositoryyn <code>hook</code>, joka lähettää sähköpostia commitin jälkeen.</li>
+		<li>Laittakaa omaan repositoryyn <code>hook</code>, jolla saatte päivitettyä sisällön nettiin (<code>public_html</code> alle siis).</li>
+	</ol>
+	
+  </body>
+</html>

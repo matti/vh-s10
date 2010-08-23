@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Versionhallinta - Harjoitukset 2/2 - Git</title>
+  
+	<link type="text/css" media="screen,print" rel="stylesheet" href="harjoitukset.css" />
+  
+  </head>
+  <body>
+    <h1>Versionhallinta - Harjoitukset 2/2 - Git</h1>
+
+	<p>Nämä harjoitukset jakautuvat kahteen osaan: etukäteen ja paikalla tehtäviin.  Pahoittelemme edelleen "branchi repositoryn trunkista" -kieltä.</p>
+	
+	<h2>Etukäteen</h2>
+	
+	<h3 class="tehtävä">Työkalut tutuiksi</h3>
+	
+	<p>Tee etukäteen nämä Linux-näppäilyharjoitukset ja yksinkertainen Gitin kokeilu, niin harjoituksissa pääset suoraan oikeisiin tehtäviin.</o>
+	<ol>
+		<li>Varmista, että pääset kirjautumaan koneelle <code>db.cs.helsinki.fi</code></li>
+		<li>Jos kyllästyttää naputtaa jatkuvasti salasanaa, niin <a href="http://cs.helsinki.fi/group/kuje/compfac/ssh_avain.html">tee itsellesi SSH-avain</a></li>
+		<li>Luo repository käyttäen <code>git init</code> -komentoa. Palvelimelle tehtävän jaetun repon tapauksessa käytetään yleensä <code>git init --bare</code> -komentoa, niin repolle ei luoda työkansiota.
+			<ul>
+				<li>Voit tehdä repositoryn mille koneelle tahansa</li>
+			</ul>
+		</li>
+		<li>Ota siitä itsellesi klooni samalle koneelle, käyttäen repon hakemistopolkua.</li>
+		
+		<li>Aseta ympäristömuuttuja $EDITOR haluamaksesi editoriksi.
+			<ul>
+				<li>Editoi tiedostoa <code>.bashrc</code></li>
+				<li>Lisää sinne rivi <code>export EDITOR=nano</code> (tai haluamasi editori)</li>
+				<li>Ota muutokset käyttöön ilman uudelleenkirjautumista <code>source .bashrc</code>
+			</ul>
+		</li>
+		
+		<li>Alussa repo on aivan tyhjä. Lisää sinne jokin tiedosto ja kommitoi master-branchiin ensimmäinen versio.</li>
+		<li>Ota repositorystä klooni jollekkin toiselle koneelle, kuten <code>melkki.cs.helsinki.fi</code> tai <code>melkinpaasi.cs.helsinki.fi</code> käyttäen <code>ssh://käyttäjätunnus@kohdekone/koko/polku/repository</code> -URLia
+			<ul>
+				<li>db:n ulkopuolisilla koneilla polku on <code>/fs/home/käyttäjätunnus</code>, db:llä <code>/home/käyttäjätunnus</code></li>
+			</ul>
+		</li>
+		<li>Jatka kokeilua, kunnes tunnet olosi kotoisaksi</li>
+	</ol>
+	
+	<h3 class="tehtävä">Tutustu tehtäviin</h3>
+	
+	<p>Katsasta tehtävät etukäteen ja kokeile onnistuuko diffin, branchin, mergen, rebasen ym. tarvittavien komentojen käyttö jo ennen harjoituksia.</p>
+	
+	
+	<h2>Paikanpäällä</h2>
+		
+	<p>Muodostellaan 3 hengen pienryhmiä ja tehdään tehtävät.</p>
+
+
+	<h3 class="tehtävä">Luo repository ja hae muiden ryhmäläisten luomista repositoryistä oma klooni</h3>
+
+	<p>Harjoitellaan vielä, että repositoryjen luonti ja tiedosto-oikeudet menevät varmasti oikein.</p>
+	
+	<ol>
+		<li>Luo Git-repository kotihakemistoosi ja anna siihen luku-, kirjoitus- ja suoritusoikeudet ryhmälle rekursiivisesti.  (<code>chmod -R g+rwx</code>)
+			<ul>
+				<li>Oikeassa käytössä oikeudet tulisi antaa vain sille ryhmälle, joka käyttää repositoryä. Nyt kuitenkin annetaan oikeudet <code>tkol</code>-ryhmälle, johon kuuluvat kaikki.</li>
+			</ul>
+		</li>
+	
+		<li>Hae muiden ryhmäläisten repositoryistä itsellesi omalle koneellesi klooni SSH:n yli.
+			<ul>
+				<li>Hae klooni esim. melkkiin: <code>ssh://USER@db/home/tunnus/repository</code></li>
+			</ul>
+		</li>
+		
+		<li>Lisätkää repositoryyn yksi tiedosto ja kokeilkaa, että saatte sen myös pushattua keskusrepoon sekä pullattua muille.</li>
+		<li>Valmis!</li>
+	</ol>
+
+
+
+
+
+	<h3 class="tehtävä">Commit-conflict: Kissan venytys</h3>
+	
+	
+	<p>On annettu "shortcat"</p>
+	
+	
+	<pre>
+	    /\___/\
+	   /       \
+	  |  #    # |
+	  \     @   |
+	   \   _|_ /
+	   /       \______
+	  / _______ ___   \
+	  |_____   \   \__/
+	   |    \__/
+	   |       |
+	   /        \
+	  /   ____   \
+	  |  /    \  |
+	  | |      | |
+	 /  |      |  \
+	 \__/      \__/
+	
+		Shortcat.
+	</pre>
+	
+	<ol>
+		<li>Luokaa ryhmälle yhteinen repository kurssin <a href="http://db.cs.helsinki.fi/~tkt_verh/repo/group.html">repositoryn luontikoneella</a>
+		<li>Hakekaa repositorystä klooni</li>
+		<li>Yksi ryhmän jäsen laittaa Shortcatin repositoryyn tiedostoon <code>shortcat.txt</code></li>
+		<li>Jokainen ryhmän jäsen pidentää oman paikallisen reponsa Shortcattiä keskikohdasta yhdellä <code>|etunimi|</code> -rivillä, pidennyksen jälkeen ryhmän jäsen pushaa commitin yhteiseen repositoryyn.  Tehkää tämä samanaikaisesti siten, että committeja tulee jokaiselle viisi kappaletta.  Shortcatin pituudeksi tulee tällöin [ryhmän jäsenien lukumäärä] x 5.  Selvittäkää ristiriidat venytyksen edetessä. Kokeilkaa käyttää sekä mergeä että rebasea.</li>
+		<li>Käyttäkää <code>git blame</code> -komentoa <code>shortcat.txt</code> -tiedostoon ja tallettakaa sen tulostus repositoryyn</li>
+		<li>Uudelleennimetkää tiedosto longcat.txt:ksi, sillä shortcat on nyt looooooooooooong.  Katsokaa <code>git status</code>:lla, että havaitseeko Git uudelleennimeyksen.</li>
+	</ol>
+
+	<h3 class="tehtävä">Branching, merge, tag, peruminen</h3>
+
+	<ol>
+		<li>Jokainen ryhmän jäsen tekee <code>master</code> -branchista oman etunimensä mukaan nimetyn branchin.</li>
+		<li>Muokatkaa oman branchinne Longcatin päätä ja jalkoja.  Commit kun on valmista.</li>
+		<li>Pushatkaa oma branchinne keskusrepoon ja varmistakaa, että muut ryhmäläiset näkevät sen.</li>
+		<li>Mergetkää oma valmis branchinne <code>master</code> -branchiin.</li>
+		<li>Tehkää <code>master</code> -branchista tag <code>valmis-[etunimi]</code></li>
+		<li>Perukaa <code>master</code> -branchin muutokset ja palauttakaa siihen alkuperäinen versio (<code>git reset --hard</code> tai <code>git checkout, git branch -f</code>).</li>
+	</ol>
+	
+	
+	<h3 class="tehtävä">Ignore</h3>
+	
+	<ol>
+		<li>Kääntäkää juurihakemistossa oleva <code>Longcat.java</code></li>
+		<li>Lisätkää hakemistoon <code>.gitignore</code> -tiedosto, jotta <code>*.class</code> -tiedostot pysyvät poissa versionhallinnasta.</li>
+	</ol>
+	
+	
+	<h3 class="tehtävä">Muita toimintoja</h3>
+	
+	<p>Näitä tehdään jos ehditään ja/tai tuntuu, että osaa aikaisemmat jo riittävän hyvin. Näitä ei tarvitse osata harjoitustyössä.</p>	
+	
+	<ol>
+		<li>Käyttäkää <code>git rebase -i</code> -komentoa: yhdistäkää, pilkokaa ja uudelleenjärjestelkää committeja.</li>
+		<li>Palauttakaa aiempia committeja <code>git reflog</code> -komennon avulla.</li>
+		<li>Kokeilkaa <code>git stash</code> -komentoa.</li>
+		<li>Käyttäkää Gitillä jotain SVN-repositoryä (esim. viime harjoitusten jäljiltä).</li>
+		<li>Käyttäkää patcheja: <code>git format-patch</code>, <code>git am</code>, myös <code>git apply</code></li>
+	</ol>
+	
+	<h3 class="tehtävä">Hooks</h3>
+
+	<p>Vähän edistyneemmille...</p>
+	<ol>
+		<li>Laittakaa omaan repositoryyn hook, joka lähettää sähköpostia pushin jälkeen.</li>
+		<li>Laittakaa omaan repositoryyn hook, jolla saatte päivitettyä sisällön nettiin (<code>public_html</code> alle siis).</li>
+	</ol>
+	
+  </body>
+</html>

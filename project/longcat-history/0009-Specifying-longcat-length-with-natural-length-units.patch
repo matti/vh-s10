@@ -1,0 +1,97 @@
+From 5b4be0ab31afebc73e984321262492b6128dc1f5 Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Tue, 28 Jul 2009 15:22:49 +0300
+Subject: Specifying longcat length with natural length units
+
+---
+ src/main/java/longcat/LengthUnit.java         |    2 +-
+ src/main/java/longcat/Longcat.java            |    5 ++++-
+ src/main/java/longcat/LongcatFactoryImpl.java |   15 ++++++++++++++-
+ src/test/java/longcat/LongcatFactoryTest.java |   15 +++++++++++++++
+ 4 files changed, 34 insertions(+), 3 deletions(-)
+
+diff --git a/src/main/java/longcat/LengthUnit.java b/src/main/java/longcat/LengthUnit.java
+index b8c22d9..fa6dc6a 100644
+--- a/src/main/java/longcat/LengthUnit.java
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -2,7 +2,7 @@ package longcat;
+ 
+ public enum LengthUnit {
+ 
+-    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9), EIFFEL("eiffels", 300.65);
++    METERS("m", 1.0), FEET("ft", 0.3048), PETRONAS("petronas", 451.9), EIFFEL("eiffels", 300.65), LINES("lines", 0.009);
+ 
+     private final String name;
+     private final double lengthInMeters;
+diff --git a/src/main/java/longcat/Longcat.java b/src/main/java/longcat/Longcat.java
+index 3f42e31..6bc0f6c 100644
+--- a/src/main/java/longcat/Longcat.java
++++ b/src/main/java/longcat/Longcat.java
+@@ -27,11 +27,14 @@ public class Longcat {
+     private final int bodySize;
+ 
+     public Longcat(int bodySize) {
++        if (bodySize < 0) {
++            throw new IllegalArgumentException("Longcat can not be that short!");
++        }
+         this.bodySize = bodySize;
+     }
+ 
+     public String getBody() {
+-        StringBuilder body = new StringBuilder();
++        StringBuilder body = new StringBuilder(bodySize * BODY_LINE.length());
+         for (int i = 0; i < bodySize; i++) {
+             body.append(BODY_LINE);
+         }
+diff --git a/src/main/java/longcat/LongcatFactoryImpl.java b/src/main/java/longcat/LongcatFactoryImpl.java
+index 9e226b0..a3bea10 100644
+--- a/src/main/java/longcat/LongcatFactoryImpl.java
++++ b/src/main/java/longcat/LongcatFactoryImpl.java
+@@ -7,6 +7,19 @@ public class LongcatFactoryImpl implements LongcatFactory {
+     }
+ 
+     public Longcat createLongcat(int length, LengthUnit unit) {
+-        return null;
++        int totalLines = LengthUnit.LINES.from(length, unit);
++        int nonBodyLines = lineCount(Longcat.HEAD_LINES + Longcat.FEET_LINES);
++        return new Longcat(totalLines - nonBodyLines);
++    }
++
++    static int lineCount(String s) {
++        int lines = 0;
++        for (int i = 0; i < s.length(); i++) {
++            char c = s.charAt(i);
++            if (c == '\n') {
++                lines++;
++            }
++        }
++        return lines;
+     }
+ }
+diff --git a/src/test/java/longcat/LongcatFactoryTest.java b/src/test/java/longcat/LongcatFactoryTest.java
+index f960046..0cc7677 100644
+--- a/src/test/java/longcat/LongcatFactoryTest.java
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -25,4 +25,19 @@ public class LongcatFactoryTest extends TestCase {
+         Longcat longcat = factory.createLongcat(2);
+         assertEquals(Longcat.HEAD_LINES + longcat.getBody() + Longcat.FEET_LINES, longcat.toString());
+     }
++
++    public void test__Longcat_length_specified_in_meters() {
++        Longcat longcat = factory.createLongcat(1, LengthUnit.METERS);
++        int lines = LongcatFactoryImpl.lineCount(longcat.toString());
++        assertEquals(LengthUnit.LINES.from(1, LengthUnit.METERS), lines);
++    }
++
++    public void test__Too_short_longcat() {
++        try {
++            factory.createLongcat(0, LengthUnit.METERS);
++            fail();
++        } catch (IllegalArgumentException e) {
++            assertEquals("Longcat can not be that short!", e.getMessage());
++        }
++    }
+ }
+-- 
+1.6.0.6
+

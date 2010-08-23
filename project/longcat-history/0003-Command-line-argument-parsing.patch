@@ -1,0 +1,169 @@
+From ef407e8189bdf6cbd8dc60969a2b2778abfefef8 Mon Sep 17 00:00:00 2001
+From: Esko Luontola <esko.luontola@gmail.com>
+Date: Fri, 5 Jun 2009 17:05:02 +0300
+Subject: Command line argument parsing
+
+---
+ src/main/java/longcat/CliArgumentParser.java     |   28 ++++++++++++++++++
+ src/main/java/longcat/LengthUnit.java            |   21 ++++++++++++++
+ src/main/java/longcat/LongcatFactory.java        |    8 ++--
+ src/main/java/longcat/LongcatFactoryImpl.java    |   12 ++++++++
+ src/test/java/longcat/CliArgumentParserTest.java |   33 ++++++++++++++++++++++
+ src/test/java/longcat/LongcatFactoryTest.java    |    2 +-
+ 6 files changed, 99 insertions(+), 5 deletions(-)
+ create mode 100644 src/main/java/longcat/CliArgumentParser.java
+ create mode 100644 src/main/java/longcat/LengthUnit.java
+ create mode 100644 src/main/java/longcat/LongcatFactoryImpl.java
+ create mode 100644 src/test/java/longcat/CliArgumentParserTest.java
+
+diff --git a/src/main/java/longcat/CliArgumentParser.java b/src/main/java/longcat/CliArgumentParser.java
+new file mode 100644
+index 0000000..7d8bd0f
+--- /dev/null
++++ b/src/main/java/longcat/CliArgumentParser.java
+@@ -0,0 +1,28 @@
++package longcat;
++
++public class CliArgumentParser {
++
++    public static final String USAGE_INSTRUCTIONS = "" +
++            "Usage: longcat SIZE UNIT\n" +
++            "       SIZE  an integer\n" +
++            "       UNIT  one of: m, ft, petronas\n";
++
++    private final LongcatFactory factory;
++
++    public CliArgumentParser(LongcatFactory factory) {
++        this.factory = factory;
++    }
++
++    public String parseArguments(String... args) {
++        if (args.length == 2) {
++            int length = Integer.parseInt(args[0]);
++            LengthUnit unit = LengthUnit.parse(args[1]);
++            Longcat cat = factory.createLongcat(length, unit);
++            return cat.toString();
++        } else {
++            return USAGE_INSTRUCTIONS;
++
++        }
++
++    }
++}
+diff --git a/src/main/java/longcat/LengthUnit.java b/src/main/java/longcat/LengthUnit.java
+new file mode 100644
+index 0000000..86f3198
+--- /dev/null
++++ b/src/main/java/longcat/LengthUnit.java
+@@ -0,0 +1,21 @@
++package longcat;
++
++public enum LengthUnit {
++
++    METERS("m"), FEET("ft"), PETRONAS("petronas");
++
++    private final String name;
++
++    private LengthUnit(String name) {
++        this.name = name;
++    }
++
++    public static LengthUnit parse(String name) {
++        for (LengthUnit unit : values()) {
++            if (unit.name.equals(name)) {
++                return unit;
++            }
++        }
++        throw new IllegalArgumentException("No such unit of length: " + name);
++    }
++}
+diff --git a/src/main/java/longcat/LongcatFactory.java b/src/main/java/longcat/LongcatFactory.java
+index 36fa6a2..1ec0cf6 100644
+--- a/src/main/java/longcat/LongcatFactory.java
++++ b/src/main/java/longcat/LongcatFactory.java
+@@ -1,8 +1,8 @@
+ package longcat;
+ 
+-public class LongcatFactory {
++public interface LongcatFactory {
+ 
+-    public Longcat createLongcat(int bodySize) {
+-        return new Longcat(bodySize);
+-    }
++    Longcat createLongcat(int bodySize);
++
++    Longcat createLongcat(int length, LengthUnit unit);
+ }
+diff --git a/src/main/java/longcat/LongcatFactoryImpl.java b/src/main/java/longcat/LongcatFactoryImpl.java
+new file mode 100644
+index 0000000..9e226b0
+--- /dev/null
++++ b/src/main/java/longcat/LongcatFactoryImpl.java
+@@ -0,0 +1,12 @@
++package longcat;
++
++public class LongcatFactoryImpl implements LongcatFactory {
++
++    public Longcat createLongcat(int bodySize) {
++        return new Longcat(bodySize);
++    }
++
++    public Longcat createLongcat(int length, LengthUnit unit) {
++        return null;
++    }
++}
+diff --git a/src/test/java/longcat/CliArgumentParserTest.java b/src/test/java/longcat/CliArgumentParserTest.java
+new file mode 100644
+index 0000000..8a92367
+--- /dev/null
++++ b/src/test/java/longcat/CliArgumentParserTest.java
+@@ -0,0 +1,33 @@
++package longcat;
++
++import junit.framework.TestCase;
++import static org.mockito.Mockito.*;
++
++public class CliArgumentParserTest extends TestCase {
++
++    private LongcatFactory factory;
++    private CliArgumentParser cli;
++    private Longcat dummyLongcat = new Longcat(1);
++
++    protected void setUp() throws Exception {
++        factory = mock(LongcatFactory.class);
++        cli = new CliArgumentParser(factory);
++    }
++
++    public void test__When_no_arguments_then_usage_instructions_are_printed() {
++        String out = cli.parseArguments();
++        assertEquals(CliArgumentParser.USAGE_INSTRUCTIONS, out);
++    }
++
++    public void test__Length_specified_in_meters() {
++        when(factory.createLongcat(3048, LengthUnit.METERS)).thenReturn(dummyLongcat);
++        String out = cli.parseArguments("3048", "m");
++        assertEquals(dummyLongcat.toString(), out);
++    }
++
++    public void test__Length_specified_in_feet() {
++        when(factory.createLongcat(10000, LengthUnit.FEET)).thenReturn(dummyLongcat);
++        String out = cli.parseArguments("10000", "ft");
++        assertEquals(dummyLongcat.toString(), out);
++    }
++}
+diff --git a/src/test/java/longcat/LongcatFactoryTest.java b/src/test/java/longcat/LongcatFactoryTest.java
+index 9f74ff3..d1dbe6e 100644
+--- a/src/test/java/longcat/LongcatFactoryTest.java
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -4,7 +4,7 @@ import junit.framework.TestCase;
+ 
+ public class LongcatFactoryTest extends TestCase {
+ 
+-    private LongcatFactory factory = new LongcatFactory();
++    private LongcatFactory factory = new LongcatFactoryImpl();
+ 
+     public void test__Longcat_with_body_size_0() {
+         Longcat longcat = factory.createLongcat(0);
+-- 
+1.6.0.6
+

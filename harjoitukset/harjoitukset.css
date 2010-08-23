@@ -1,0 +1,30 @@
+/* laskurit alkaa */
+h1 {
+	/* tehtävät pitää alustaa! */
+	counter-reset: tehtävä;
+	counter-reset: alitehtävä;
+}
+
+h3 {
+	counter-reset: alitehtävä;	
+	counter-increment: tehtävä;
+}
+
+h3.tehtävä:before {
+	content: counter(tehtävä) ". ";
+}
+
+h4 {
+	counter-increment: alitehtävä;
+}
+
+h4.tehtävä:before {
+	content: counter(tehtävä) " " counter(alitehtävä, lower-alpha) ") ";
+}
+
+/* laskurit loppuu */
+
+
+h1, h2 { border-bottom: 0.1em solid #000; }
+h3, h4 { border-bottom: 0.1em dashed #999; }
+	

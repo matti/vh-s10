@@ -1,0 +1,3 @@
+#!/usr/bin/ruby
+require 'robot/common'
+require 'robot/post-receive'

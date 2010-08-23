@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+
+Dir.chdir ARGV[0]
+require 'robot/common'
+
+exit 0 if File.exists?("robolock")
+
+require 'robot/pre-commit'

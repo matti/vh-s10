@@ -1,0 +1,77 @@
+From cfe155e199ba3941afee8bbaceb5ee6ad93e0967 Mon Sep 17 00:00:00 2001
+From: Robotti Ruttunen <robotti@versionhallinta-kurssi>
+Date: Tue, 28 Jul 2009 15:18:21 +0300
+Subject: Refactored: renamed constants
+
+---
+ src/main/java/longcat/Longcat.java            |   10 +++++-----
+ src/test/java/longcat/LongcatFactoryTest.java |    6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/main/java/longcat/Longcat.java b/src/main/java/longcat/Longcat.java
+index 3949613..3f42e31 100644
+--- a/src/main/java/longcat/Longcat.java
++++ b/src/main/java/longcat/Longcat.java
+@@ -4,7 +4,7 @@ public class Longcat {
+ 
+     // Source: http://encyclopediadramatica.com/Longcat
+ 
+-    public static final String HEAD_ROW = "" +
++    public static final String HEAD_LINES = "" +
+             "    /\\___/\\         \n" +
+             "   /       \\         \n" +
+             "  |  #    # |         \n" +
+@@ -14,9 +14,9 @@ public class Longcat {
+             "  / _______ ___   \\  \n" +
+             "  |_____   \\   \\__/ \n" +
+             "   |    \\__/         \n";
+-    public static final String BODY_ROW = "" +
++    public static final String BODY_LINE = "" +
+             "   |       |          \n";
+-    public static final String FEET_ROW = "" +
++    public static final String FEET_LINES = "" +
+             "   /        \\        \n" +
+             "  /   ____   \\       \n" +
+             "  |  /    \\  |       \n" +
+@@ -33,12 +33,12 @@ public class Longcat {
+     public String getBody() {
+         StringBuilder body = new StringBuilder();
+         for (int i = 0; i < bodySize; i++) {
+-            body.append(BODY_ROW);
++            body.append(BODY_LINE);
+         }
+         return body.toString();
+     }
+ 
+     public String toString() {
+-        return HEAD_ROW + getBody() + FEET_ROW;
++        return HEAD_LINES + getBody() + FEET_LINES;
+     }
+ }
+diff --git a/src/test/java/longcat/LongcatFactoryTest.java b/src/test/java/longcat/LongcatFactoryTest.java
+index d1dbe6e..f960046 100644
+--- a/src/test/java/longcat/LongcatFactoryTest.java
++++ b/src/test/java/longcat/LongcatFactoryTest.java
+@@ -13,16 +13,16 @@ public class LongcatFactoryTest extends TestCase {
+ 
+     public void test__Longcat_with_body_size_1() {
+         Longcat longcat = factory.createLongcat(1);
+-        assertEquals(Longcat.BODY_ROW, longcat.getBody());
++        assertEquals(Longcat.BODY_LINE, longcat.getBody());
+     }
+ 
+     public void test__Longcat_with_body_size_2() {
+         Longcat longcat = factory.createLongcat(2);
+-        assertEquals(Longcat.BODY_ROW + Longcat.BODY_ROW, longcat.getBody());
++        assertEquals(Longcat.BODY_LINE + Longcat.BODY_LINE, longcat.getBody());
+     }
+ 
+     public void test__Fully_assembled_longcat() {
+         Longcat longcat = factory.createLongcat(2);
+-        assertEquals(Longcat.HEAD_ROW + longcat.getBody() + Longcat.FEET_ROW, longcat.toString());
++        assertEquals(Longcat.HEAD_LINES + longcat.getBody() + Longcat.FEET_LINES, longcat.toString());
+     }
+ }
+-- 
+1.6.0.6
+

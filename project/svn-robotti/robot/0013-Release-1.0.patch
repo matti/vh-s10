@@ -1,0 +1,25 @@
+From e70a64b8b2088309a6636618a620e75290b7b2ca Mon Sep 17 00:00:00 2001
+From: Robotti Ruttunen <robotti@versionhallinta-kurssi>
+Date: Fri, 5 Jun 2009 21:06:54 +0300
+Subject: Release 1.0
+
+---
+ pom.xml |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index a20bf1b..869b751 100644
+--- a/trunk/pom.xml
++++ b/trunk/pom.xml
+@@ -5,7 +5,7 @@
+ 
+     <groupId>net.orfjackal.longcat</groupId>
+     <artifactId>longcat</artifactId>
+-    <version>0.1.0-SNAPSHOT</version>
++    <version>1.0</version>
+     <packaging>jar</packaging>
+ 
+     <name>Longcat</name>
+-- 
+1.6.0.6
+
